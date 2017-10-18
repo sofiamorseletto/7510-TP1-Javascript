@@ -67,8 +67,6 @@ describe("Interpreter", function () {
             assert(interpreter.checkQuery('padre(mario, pepe)') === false);
         });
 
-        // TODO: Add more tests
-
     });
 
     describe('Interpreter Rules', function () {
@@ -83,11 +81,21 @@ describe("Interpreter", function () {
             assert(interpreter.checkQuery('hijo(pepe, juan)'));
         });
 
-        // TODO: Add more tests
+    });
+
+    describe('Incomplete query', function () {
+
+        it('varon should be null', function () {
+            assert(interpreter.checkQuery('varon') === null);
+        });
+        it('maria should be null', function () {
+            assert(interpreter.checkQuery('maria') === null);
+        });
+        it('empty should be null', function () {
+            assert(interpreter.checkQuery('') === null);
+        });
 
     });
 
 
 });
-
-
