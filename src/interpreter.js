@@ -18,7 +18,8 @@ var Interpreter = function () {
 		}else if (match != null){
 			mapa.get(match[1]).push(match[3]);
 		}else{
-			//Mala database
+            //Bad database
+			return null;
 		}
 		return mapa;
     }
@@ -27,7 +28,9 @@ var Interpreter = function () {
     	var mapa = new Map();
 
     	for (var i = 0; i < db.length; i++) {
-    		this.createMapFacts(db[i], mapa);
+    		var dbOk = this.createMapFacts(db[i], mapa);
+            if (!dbOk)
+                return null;
     	}
     	return mapa;
     }
@@ -40,7 +43,7 @@ var Interpreter = function () {
 
     		if (match != null) {
     			var facts = match[4].match(/[\s]?([\sa-zA-Z]*\([\sa-zA-Z,]*\))/g);
-    			var ref = match[3].split(/,[\s]?/);			
+    			var ref = match[3].split(/,[\s]?/);
     			mapa.set(match[1], [facts, ref]);
     		}
     	}
@@ -81,10 +84,20 @@ var Interpreter = function () {
 
     this.checkQuery = function (query) {
     	var parsedQuery = this.parseFact(query);
-    	var parsedRules = this.parseRules(this.db);
+
+        if(!parsedQuery)
+            return null;
+
     	var parsedFacts = this.parseFacts(this.db);
+
+        if(!parsedFacts)
+            return null;
+
+        var parsedRules = this.parseRules(this.db);
+
     	if(this.checkFact(parsedQuery, parsedFacts) || this.checkRule(parsedQuery, parsedRules, parsedFacts))
     		return true;
+
         return false;
     }
 
